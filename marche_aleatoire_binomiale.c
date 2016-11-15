@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <tgmath.h>
 #include <time.h>
 
 int my_rand_int(int a, int b, double p);  /* Fonction tirant la valeur a selon la probabilite
@@ -24,7 +25,9 @@ int main(void){
 	int n_pas = 0;        // Nombre de pas
 	double p = 0.;        // Probabilite de tirer un pas de 1
 	double position = 0.;  // Position de la particule
-	double sum = 0.;      // Contient la somme des pas pour un n des differentes marches
+	double moment_1 = 0.;  // Contient la somme des pas pour un n des differentes marches
+	double moment_2 = 0.;  // Contient la somme des pas au carre pour un n des differentes marches
+	double std_dev = 0.;  // Ecart type
 
 	printf("Nombre de marches aleatoires ? ");
 	scanf("%d", &n_iter);
@@ -41,12 +44,18 @@ int main(void){
 	/* Marche(s) aleatoire(s) */
 	//fprintf(file, "%d %g\n", 0, position);
 	for(int i=0;i<n_pas;i++){
-		sum = 0.;
+		moment_1 = 0.;
+		moment_2 = 0.;
 		for(int j=0;j<n_iter;j++){
-			sum += (double)my_rand_int(1, -1, p);
+			double rand_num = (double)my_rand_int(1, -1, p);
+			moment_1 += rand_num;
+			moment_2 += rand_num*rand_num;
 		}
-		position += sum/(double)n_iter;
-		fprintf(file, "%d %g\n", i+1, position);
+		moment_1 /= (double) n_iter;
+		moment_2 /= (double) n_iter;
+		position += moment_1;
+		std_dev += sqrt(moment_2 - moment_1*moment_1);
+		fprintf(file, "%d %g %g\n", i+1, position, std_dev);
 	}
 	
 	fclose(file);
