@@ -1,0 +1,65 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+
+%opening
+\title{Travaux Pratiques : Marches aléatoires}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\textbf{1-1} On peut utiliser le temps auquel est exécuté le programme en tant que graine pour qu'elle change à chaque marche aléatoire.
+
+\section{Loi binomiale}
+
+\textbf{2-1} La fonction \textit{rand()} de la bibliothèque standard du \textit{C} tire un nombre (pseudo-)aléatoire $x$ dans l'intervalle $\left[0, \text{RAND\_MAX}\right]$. Pour tirer à partir de celle-ci un nombre $a$ avec probabilité $p$ et un nombre $b$ avec probabilité $q = 1-p$, on tire $x$ puis on applique le test suivant : si $\frac{x}{\text{RAND\_MAX}} \leq p$ alors le résultat est $a$ sinon le résultat est $b$.
+Les variables aléatoire $\left\{X_i\right\}_{i \in [\![1, n]\!]}$ sont indépendantes et identiquement distribuée de selon un loi de Bernoulli de paramètre $p$. En rappelant que l'espérance d'une loi de Bernoulli est donnée par $\mathbb{E}\left[X\right] = 2p-1$, on a :
+\begin{equation}
+	\left<S_n\right> = \left<\sum\limits_{i=1}^n X_i\right>
+                     = \sum\limits_{i=1}^n \left<X_i\right>
+                     = \left(2p-1\right)n
+\end{equation}
+où $n \in [\![1, N]\!]$.
+
+\textbf{2-4} La variance de la variable aléatoire $S_n$ est donnée par :
+\begin{align*}
+	\sigma_{S_n}^2 &= \left<S_n^2\right> - \left<S_n\right>^2 \\
+	               &= \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{n}\left<X_iX_j
+	               \right> - \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{n} \left<X_i\right>\left<X_j\right>\\
+	               &= \sum\limits_{i=1}^{n}\left<X_i^2\right>
+	               + \sum\limits_{i=1}^{n}\sum\limits_{j\neq i}
+	               \left<X_iX_j\right> -
+	               \sum\limits_{i=1}^{n}\left<X_i\right>^2
+	               - \sum\limits_{i=1}^{n}\sum\limits_{j\neq i}
+	               \left<X_i\right>\left<X_j\right>\\
+	               &= \sum\limits_{i=1}^{n}\left(\left<X_i^2\right> -
+	               \left<X_i\right>^2\right)\\
+	               &= \sum\limits_{i=1}^{n} \sigma_{X_i}^2 = n\times\sigma_{X_i}^2 = 2pn
+\end{align*}
+où on a utilisé le fait que les variables aléatoires $X_i$ sont indépendantes pour annuler les sommes portant sur les paires, le fait qu'elles sont identiquement distribuées sur la dernière ligne et enfin le fait que la variance d'une variable aléatoire suivant un loi de Bernoulli est $2p$.
+Ainsi pour $p=\frac{1}{2}$, on doit trouver : $\sigma_{S_n} = \sqrt{n}$.
+
+\section{Loi uniforme}
+
+\textbf{3-1} Il suffit alors d'appliquer la transformation $f(x) = \frac{x}{\text{RAND\_MAX}} - 0.5$ pour obtenir un nombre dans l'intervalle $\left[-0.5, 0.5\right]$.
+
+\section{Loi gaussienne}
+
+\section{Loi de Cauchy}
+
+\textbf{5-1} La fonction de répartition d'une loi de Cauchy de paramètre $a$ et $x_0$ est donnée par :
+\begin{equation}
+	F(x) = \int_{-\infty}^x f(u)\mathrm{d}u
+	     = \frac{1}{2} + \frac{1}{\pi} \arctan\left(\frac{x-x_0}{a}\right)
+\end{equation}
+et sa fonction inverse par :
+\begin{equation}
+	F^{-1}(x) = \arctan\left[\pi\left(x-\frac{1}{2}\right)\right] + x_0
+\end{equation}. En utilisant la méthode de la transformation inverse, on sait que si $Y$ est une variable aléatoire suivant une loi uniforme sur $\left[0, 1\right]$, la variable aléatoire $X = \arctan \left[\pi\left(Y-\frac{1}{2}\right)\right] + x_0$ suit alors une loi de Cauchy. 
+\end{document}
